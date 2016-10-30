@@ -1,4 +1,4 @@
-package com.creationgroundmedia.twitternator.data;
+package com.creationgroundmedia.twitternator.models;
 
 import com.raizlabs.android.dbflow.annotation.Database;
 
