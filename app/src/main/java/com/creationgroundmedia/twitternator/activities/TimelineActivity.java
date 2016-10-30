@@ -10,13 +10,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.creationgroundmedia.twitternator.R;
 import com.creationgroundmedia.twitternator.TwitterApplication;
 import com.creationgroundmedia.twitternator.TwitterClient;
 import com.creationgroundmedia.twitternator.adapters.EndlessRecyclerViewScrollListener;
 import com.creationgroundmedia.twitternator.adapters.TweetsAdapter;
+import com.creationgroundmedia.twitternator.fragments.TweetAddFragment;
 import com.creationgroundmedia.twitternator.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
@@ -27,6 +27,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.util.TextUtils;
 
 public class TimelineActivity
         extends AppCompatActivity
@@ -131,6 +132,20 @@ public class TimelineActivity
 
     @Override
     public void onFragmentInteraction(String status) {
-        Toast.makeText(this, "status = \"" + status + "\"", Toast.LENGTH_SHORT).show();
+        if (!TextUtils.isEmpty(status)) {
+            client.updateStatus(status, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    Tweet tweet = Tweet.fromJson(response);
+                    tweet.save();
+                    mTweets.add(0, tweet);
+                    mTweetsAdapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                }
+            });
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.creationgroundmedia.twitternator.activities;
+package com.creationgroundmedia.twitternator.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
