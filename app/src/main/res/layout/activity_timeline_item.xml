@@ -42,15 +42,26 @@
             android:layout_alignStart="@+id/tvUserName" />
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/tvCreatedAt"
+            tools:text="3 minutes ago" />
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tvBody"
             android:layout_weight="1"
             tools:text="body of text"
+            android:autoLink="all"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:layout_below="@+id/tvScreenName"
             android:layout_alignLeft="@+id/tvScreenName"
             android:layout_alignStart="@+id/tvScreenName"
             android:layout_marginTop="16dp" />
+
     </RelativeLayout>
 </android.support.v7.widget.CardView>

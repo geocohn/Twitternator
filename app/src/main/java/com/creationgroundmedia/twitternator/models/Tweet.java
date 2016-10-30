@@ -1,6 +1,7 @@
 package com.creationgroundmedia.twitternator.models;
 
 import android.support.annotation.NonNull;
+import android.text.format.DateUtils;
 
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
@@ -11,7 +12,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by geo on 10/28/16.
@@ -58,6 +62,7 @@ public class Tweet extends BaseModel {
                 tweet.setUserProfileImageUrl(
                         jsonUser.getString("profile_image_url").replace("normal", "bigger"));
             }
+            tweet.save();
         } catch (JSONException e) {
             e.printStackTrace();
         };
@@ -118,6 +123,25 @@ public class Tweet extends BaseModel {
 
     public void setUserProfileImageUrl(String userProfileImageUrl) {
         this.userProfileImageUrl = userProfileImageUrl;
+    }
+
+    // getRelativeTimeAgo("Mon Apr 01 21:16:23 +0000 2014");
+    // from https://gist.github.com/nesquena/f786232f5ef72f6e10a7
+    public String getCreatedAtRelativeTimeAgo() {
+        String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
+        SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
+        sf.setLenient(true);
+
+        String relativeDate = "";
+        try {
+            long dateMillis = sf.parse(getCreatedAt()).getTime();
+            relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
+                    System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return relativeDate;
     }
 
     public static ArrayList<Tweet> fromJsonArray(JSONArray jsonTweets) {

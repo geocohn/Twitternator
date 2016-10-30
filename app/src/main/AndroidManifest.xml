@@ -42,7 +42,7 @@
         </activity>
         <activity android:name="com.creationgroundmedia.twitternator.activities.TimelineActivity"
             android:label="@string/activity_timeline_name"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 
