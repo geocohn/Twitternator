@@ -2,6 +2,7 @@ package com.creationgroundmedia.twitternator.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,6 +39,7 @@ public class TimelineActivity
     ArrayList<Tweet> mTweets;
     TweetsAdapter mTweetsAdapter;
     RecyclerView mRvTweets;
+    private SwipeRefreshLayout swipeContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,13 +78,33 @@ public class TimelineActivity
         });
 
         client = TwitterApplication.getRestClient();
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getNewTweets();
+            }
+        });
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
 
         if (preloadTimeline() == 0) {
             populateTimeline(false, 25, 1, 0);
         } else {
             if (!mTweets.isEmpty()) {
-                populateTimeline(true, 0, mTweets.get(0).getId(), 0);
+                populateTimeline(true, 25, mTweets.get(0).getId(), 0);
             }
+        }
+    }
+
+    private void getNewTweets() {
+        swipeContainer.setRefreshing(true);
+        if (mTweets.isEmpty()) {
+            populateTimeline(false, 25, 1, 0);
+        } else {
+            populateTimeline(true, 25, mTweets.get(0).getId(), 0);
         }
     }
 
@@ -110,6 +132,7 @@ public class TimelineActivity
                     mTweets.addAll(Tweet.fromJsonArray(response));
                 }
                 mTweetsAdapter.notifyDataSetChanged();
+                swipeContainer.setRefreshing(false);
             }
 
             @Override
