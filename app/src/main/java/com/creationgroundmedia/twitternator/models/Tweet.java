@@ -45,6 +45,9 @@ public class Tweet extends BaseModel {
     @Column
     String userProfileImageUrl;
 
+    @Column
+    String collection;
+
     public Tweet() {
     }
 
@@ -69,6 +72,15 @@ public class Tweet extends BaseModel {
 
         return tweet;
     }
+
+    public static Tweet fromJson(@NonNull JSONObject jsonTweet, String collection) {
+        Tweet tweet = fromJson(jsonTweet);
+        if (tweet != null) {
+            tweet.collection = collection;
+        }
+        return tweet;
+    }
+
     public String getCreatedAt() {
         return createdAt;
     }
@@ -125,6 +137,14 @@ public class Tweet extends BaseModel {
         this.userProfileImageUrl = userProfileImageUrl;
     }
 
+    public String getCollection() {
+        return collection;
+    }
+
+    public void setCollection(String collection) {
+        this.collection = collection;
+    }
+
     // getRelativeTimeAgo("Mon Apr 01 21:16:23 +0000 2014");
     // from https://gist.github.com/nesquena/f786232f5ef72f6e10a7
     public String getCreatedAtRelativeTimeAgo() {
@@ -144,13 +164,13 @@ public class Tweet extends BaseModel {
         return relativeDate;
     }
 
-    public static ArrayList<Tweet> fromJsonArray(JSONArray jsonTweets) {
+    public static ArrayList<Tweet> fromJsonArray(JSONArray jsonTweets, String collection) {
         ArrayList<Tweet> tweets = new ArrayList<>();
 
         for (int i = 0; i < jsonTweets.length(); i++) {
             Tweet tweet = null;
             try {
-                tweet = Tweet.fromJson(jsonTweets.getJSONObject(i));
+                tweet = Tweet.fromJson(jsonTweets.getJSONObject(i), collection);
             } catch (JSONException e) {
                 e.printStackTrace();
                 continue;

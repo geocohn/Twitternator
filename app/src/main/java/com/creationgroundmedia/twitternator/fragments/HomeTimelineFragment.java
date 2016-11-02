@@ -16,18 +16,18 @@ public class HomeTimelineFragment
     final static String LOG_TAG = HomeTimelineFragment.class.getSimpleName();
 
     @Override
-    public void populateTimeline(final boolean newTweets, int count, long sinceId, long maxId) {
+    public void populateTimeline(final String collection, final boolean newTweets, int count, long sinceId, long maxId) {
         Log.d(LOG_TAG, "populateTimeline(" + newTweets + ", " + count + ", " + sinceId + ", " + maxId + ")");
         client.getHomeTimeline(count, sinceId, maxId, (new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 if (newTweets) {
                     Log.d(LOG_TAG, "inserting " + response.length() + " new tweets");
-                    mTweets.addAll(0, Tweet.fromJsonArray(response));
+                    mTweets.addAll(0, Tweet.fromJsonArray(response, collection));
                 } else {
                     Log.d(LOG_TAG, "appending " + response.length() + " tweets");
 
-                    mTweets.addAll(Tweet.fromJsonArray(response));
+                    mTweets.addAll(Tweet.fromJsonArray(response, collection));
                 }
                 mTweetsAdapter.notifyDataSetChanged();
                 swipeContainer.setRefreshing(false);
