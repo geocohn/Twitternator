@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.codepath.oauth.OAuthBaseClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.scribe.builder.api.Api;
@@ -51,6 +52,21 @@ public class TwitterClient extends OAuthBaseClient {
 		getClient().get(apiUrl, params, handler);
 	}
 
+	public void getUserTimeline(int count, long sinceId, long maxId, JsonHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("statuses/user_timeline.json");
+		RequestParams params = new RequestParams();
+		if (count != 0) {
+			params.put("count", count);
+		}
+		if (sinceId != 0) {
+			params.put("since_id", sinceId);
+		}
+		if (maxId != 0) {
+			params.put("max_id", maxId);
+		}
+		getClient().get(apiUrl, params, handler);
+	}
+
 	public void updateStatus(String status, AsyncHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("statuses/update.json");
 		RequestParams params = new RequestParams();
@@ -58,4 +74,6 @@ public class TwitterClient extends OAuthBaseClient {
 		params.put("status", status);
 		getClient().post(apiUrl, params, handler);
 	}
+
+
 }
