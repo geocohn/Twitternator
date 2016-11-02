@@ -1,5 +1,7 @@
 package com.creationgroundmedia.twitternator.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.text.format.DateUtils;
 
@@ -17,12 +19,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
-/**
- * Created by geo on 10/28/16.
- */
-
 @Table(database = TwitterDb.class)
-public class Tweet extends BaseModel {
+public class Tweet extends BaseModel implements Parcelable {
     @Column
     String createdAt;
 
@@ -181,4 +179,44 @@ public class Tweet extends BaseModel {
         }
         return tweets;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.createdAt);
+        dest.writeLong(this.id);
+        dest.writeString(this.body);
+        dest.writeString(this.userName);
+        dest.writeLong(this.userId);
+        dest.writeString(this.userScreenName);
+        dest.writeString(this.userProfileImageUrl);
+        dest.writeString(this.collection);
+    }
+
+    protected Tweet(Parcel in) {
+        this.createdAt = in.readString();
+        this.id = in.readLong();
+        this.body = in.readString();
+        this.userName = in.readString();
+        this.userId = in.readLong();
+        this.userScreenName = in.readString();
+        this.userProfileImageUrl = in.readString();
+        this.collection = in.readString();
+    }
+
+    public static final Parcelable.Creator<Tweet> CREATOR = new Parcelable.Creator<Tweet>() {
+        @Override
+        public Tweet createFromParcel(Parcel source) {
+            return new Tweet(source);
+        }
+
+        @Override
+        public Tweet[] newArray(int size) {
+            return new Tweet[size];
+        }
+    };
 }
