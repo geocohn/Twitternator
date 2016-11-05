@@ -44,6 +44,10 @@
             android:label="@string/activity_timeline_name"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity android:name=".activities.ProfileActivity"
+            android:label="@string/activity_profile_name"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

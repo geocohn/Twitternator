@@ -44,6 +44,15 @@ public class Tweet extends BaseModel implements Parcelable {
     String userProfileImageUrl;
 
     @Column
+    String userTagline;
+
+    @Column
+    int userFollowers;
+
+    @Column
+    int userFollowing;
+
+    @Column
     String collection;
 
     public Tweet() {
@@ -57,11 +66,14 @@ public class Tweet extends BaseModel implements Parcelable {
             tweet.setCreatedAt(jsonTweet.getString("created_at"));
             JSONObject jsonUser = jsonTweet.getJSONObject("user");
             if (jsonUser != null) {
-                tweet.setUserName(jsonUser.getString("name"));
-                tweet.setUserId(jsonUser.getLong("id"));
-                tweet.setUserScreenName("@" + jsonUser.getString("screen_name"));
-                tweet.setUserProfileImageUrl(
-                        jsonUser.getString("profile_image_url").replace("normal", "bigger"));
+                User user = User.fromJson(jsonUser);
+                tweet.setUserName(user.getName());
+                tweet.setUserId(user.getId());
+                tweet.setUserScreenName(user.getScreenName());
+                tweet.setUserProfileImageUrl(user.getProfileImageUrl());
+                tweet.setUserTagline(user.getTagline());
+                tweet.setUserFollowers(user.getFollowers());
+                tweet.setUserFollowing(user.getFollowing());
             }
             tweet.save();
         } catch (JSONException e) {
@@ -133,6 +145,30 @@ public class Tweet extends BaseModel implements Parcelable {
 
     public void setUserProfileImageUrl(String userProfileImageUrl) {
         this.userProfileImageUrl = userProfileImageUrl;
+    }
+
+    public int getUserFollowers() {
+        return userFollowers;
+    }
+
+    public void setUserFollowers(int userFollowers) {
+        this.userFollowers = userFollowers;
+    }
+
+    public int getUserFollowing() {
+        return userFollowing;
+    }
+
+    public void setUserFollowing(int userFollowing) {
+        this.userFollowing = userFollowing;
+    }
+
+    public String getUserTagline() {
+        return userTagline;
+    }
+
+    public void setUserTagline(String userTagline) {
+        this.userTagline = userTagline;
     }
 
     public String getCollection() {

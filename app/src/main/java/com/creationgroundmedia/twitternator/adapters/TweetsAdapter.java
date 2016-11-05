@@ -26,7 +26,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.creationgroundmedia.twitternator.R;
+import com.creationgroundmedia.twitternator.activities.ProfileActivity;
 import com.creationgroundmedia.twitternator.models.Tweet;
+import com.creationgroundmedia.twitternator.models.User;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -61,6 +63,12 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Tweet tweet = mTweets.get(position);
         Picasso.with(mContext).load(tweet.getUserProfileImageUrl()).into(holder.ivProfileImage);
+        holder.ivProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProfileActivity.launchActivity(mContext, User.fromTweet(tweet));
+            }
+        });
         holder.tvUserName.setText(tweet.getUserName());
         holder.tvScreenName.setText(tweet.getUserScreenName());
         holder.tvCreatedAt.setText(tweet.getCreatedAtRelativeTimeAgo());

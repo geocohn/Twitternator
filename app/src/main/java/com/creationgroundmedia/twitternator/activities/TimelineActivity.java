@@ -1,3 +1,4 @@
+
 package com.creationgroundmedia.twitternator.activities;
 
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,13 +20,16 @@ import com.creationgroundmedia.twitternator.R;
 import com.creationgroundmedia.twitternator.TwitterApplication;
 import com.creationgroundmedia.twitternator.TwitterClient;
 import com.creationgroundmedia.twitternator.fragments.HomeTimelineFragment;
+import com.creationgroundmedia.twitternator.fragments.MentionsTimelineFragment;
 import com.creationgroundmedia.twitternator.fragments.TimelineFragment;
 import com.creationgroundmedia.twitternator.fragments.TweetAddFragment;
-import com.creationgroundmedia.twitternator.fragments.UserTimelineFragment;
 import com.creationgroundmedia.twitternator.models.Tweet;
+import com.creationgroundmedia.twitternator.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONObject;
+
+import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.util.TextUtils;
@@ -39,7 +44,8 @@ public class TimelineActivity
 
     TwitterClient client;
     private ViewPager mViewPager;
-
+    private MenuItem mMyProfileMenu;
+    private User mMe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +57,7 @@ public class TimelineActivity
         actionBar.setIcon(R.drawable.ic_launcher);
 
         client = TwitterApplication.getRestClient();
+        getProfileUserInfo();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -68,15 +75,39 @@ public class TimelineActivity
         tabLayout.setupWithViewPager(mViewPager);
     }
 
+    private void getProfileUserInfo() {
+        client.getVerifyCredentials(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                mMe = User.fromJson(response);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d(LOG_TAG, "onFailure 2");
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+        });
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_timeline, menu);
+        mMyProfileMenu = menu.findItem(R.id.menu_my_profile);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (item == mMyProfileMenu) {
+            ProfileActivity.launchActivity(this, mMe);
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -89,15 +120,23 @@ public class TimelineActivity
                     Tweet tweet = Tweet.fromJson(response);
                     tweet.setCollection("me");
                     tweet.save();
-                    // TODO: get this to work
-//                    mTweets.add(0, tweet);
-//                    mTweetsAdapter.notifyDataSetChanged();
+                    sendTweetToFragments(tweet);
                 }
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 }
             });
+        }
+    }
+
+    private void sendTweetToFragments(Tweet tweet) {
+        List<Fragment> fragments =  getSupportFragmentManager().getFragments();
+        for (Fragment frag : fragments) {
+            if (frag.getClass().isInstance(TimelineFragment.class)) {
+                Log.d(LOG_TAG, "Adding new tweet to fragment");
+                ((TimelineFragment)frag).addTweet(tweet);
+            }
         }
     }
 
@@ -111,7 +150,7 @@ public class TimelineActivity
         public Fragment getItem(int position) {
             switch (position) {
                 case 0: return timelineFragmentInstance(new HomeTimelineFragment(), "home");
-                case 1: return timelineFragmentInstance(new UserTimelineFragment(), "me");
+                case 1: return timelineFragmentInstance(new MentionsTimelineFragment(), "mentions");
             }
             return null;
         }
@@ -125,9 +164,9 @@ public class TimelineActivity
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Home";
+                    return getString(R.string.tab_title_home);
                 case 1:
-                    return "My tweets";
+                    return getString(R.string.tab_title_mentions);
             }
             return null;
         }

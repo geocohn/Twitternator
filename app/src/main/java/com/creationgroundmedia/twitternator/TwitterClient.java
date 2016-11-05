@@ -3,7 +3,7 @@ package com.creationgroundmedia.twitternator;
 import android.content.Context;
 
 import com.codepath.oauth.OAuthBaseClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.creationgroundmedia.twitternator.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -37,9 +37,11 @@ public class TwitterClient extends OAuthBaseClient {
 		mContext = context;
 	}
 
-	public void getHomeTimeline(int count, long sinceId, long maxId, AsyncHttpResponseHandler handler) {
-		String apiUrl = getApiUrl("statuses/home_timeline.json");
+	public void getTimeline(User user, String apiUrl, int count, long sinceId, long maxId, JsonHttpResponseHandler handler) {
 		RequestParams params = new RequestParams();
+		if (user != null) {
+			params.put("user_id", user.getId());
+		}
 		if (count != 0) {
 			params.put("count", count);
 		}
@@ -51,29 +53,27 @@ public class TwitterClient extends OAuthBaseClient {
 		}
 		getClient().get(apiUrl, params, handler);
 	}
-
-	public void getUserTimeline(int count, long sinceId, long maxId, JsonHttpResponseHandler handler) {
-		String apiUrl = getApiUrl("statuses/user_timeline.json");
-		RequestParams params = new RequestParams();
-		if (count != 0) {
-			params.put("count", count);
-		}
-		if (sinceId != 0) {
-			params.put("since_id", sinceId);
-		}
-		if (maxId != 0) {
-			params.put("max_id", maxId);
-		}
-		getClient().get(apiUrl, params, handler);
+	public void getHomeTimeline(int count, long sinceId, long maxId, JsonHttpResponseHandler handler) {
+		getTimeline(null, getApiUrl("statuses/home_timeline.json"), count, sinceId, maxId, handler);
 	}
 
-	public void updateStatus(String status, AsyncHttpResponseHandler handler) {
+	public void getUserTimeline(User user, int count, long sinceId, long maxId, JsonHttpResponseHandler handler) {
+		getTimeline(user, getApiUrl("statuses/user_timeline.json"), count, sinceId, maxId, handler);
+	}
+
+	public void getMentionsTimeline(int count, long sinceId, long maxId, JsonHttpResponseHandler handler) {
+		getTimeline(null, getApiUrl("statuses/mentions_timeline.json"), count, sinceId, maxId, handler);
+	}
+
+	public void getVerifyCredentials(JsonHttpResponseHandler handler) {
+		getClient().get(getApiUrl("account/verify_credentials.json"), null, handler);
+	}
+
+	public void updateStatus(String status, JsonHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("statuses/update.json");
 		RequestParams params = new RequestParams();
 
 		params.put("status", status);
 		getClient().post(apiUrl, params, handler);
 	}
-
-
 }

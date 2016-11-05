@@ -19,6 +19,7 @@ import com.creationgroundmedia.twitternator.adapters.EndlessRecyclerViewScrollLi
 import com.creationgroundmedia.twitternator.adapters.TweetsAdapter;
 import com.creationgroundmedia.twitternator.models.Tweet;
 import com.creationgroundmedia.twitternator.models.Tweet_Table;
+import com.creationgroundmedia.twitternator.models.User;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public abstract class TimelineFragment
         extends Fragment {
     final static String LOG_TAG = TimelineFragment.class.getSimpleName();
     public final static String ARG_COLLECTION = "collection";
+    public final static String ARG_USER = "user";
 
     TwitterClient client;
     RecyclerView mRvTweets;
@@ -35,6 +37,7 @@ public abstract class TimelineFragment
     TweetsAdapter mTweetsAdapter;
     SwipeRefreshLayout swipeContainer;
     private String mCollection;
+    private User mUser;
 
     @Override
     public void onAttach(Context context) {
@@ -47,6 +50,7 @@ public abstract class TimelineFragment
         Bundle args = getArguments();
         if (args != null) {
             mCollection = args.getString(ARG_COLLECTION);
+            mUser = args.getParcelable(ARG_USER);
         }
         client = TwitterApplication.getRestClient();
 
@@ -69,11 +73,11 @@ public abstract class TimelineFragment
             public void onLoadMore(int page, int totalItemsCount) {
                 if (!mTweets.isEmpty()) {
                     // get any tweets newer than the top of the list
-                    populateTimeline(mCollection, true, 0, mTweets.get(0).getId(), 0);
+                    populateTimeline(mUser, mCollection, true, 0, mTweets.get(0).getId(), 0);
                     // pick up 25 more tweets from the bottom
-                    populateTimeline(mCollection, false, 25, 0, mTweets.get(mTweets.size() - 1).getId() - 1);
+                    populateTimeline(mUser, mCollection, false, 25, 0, mTweets.get(mTweets.size() - 1).getId() - 1);
                 } else {
-                    populateTimeline(mCollection, false, 25, 1, 0);
+                    populateTimeline(mUser, mCollection, false, 25, 1, 0);
                 }
             }
         });
@@ -91,10 +95,10 @@ public abstract class TimelineFragment
                 android.R.color.holo_red_light);
 
         if (preloadTimeline() == 0) {
-            populateTimeline(mCollection, false, 25, 1, 0);
+            populateTimeline(mUser, mCollection, false, 25, 1, 0);
         } else {
             if (!mTweets.isEmpty()) {
-                populateTimeline(mCollection, true, 25, mTweets.get(0).getId(), 0);
+                populateTimeline(mUser, mCollection, true, 25, mTweets.get(0).getId(), 0);
             }
         }
 
@@ -104,9 +108,9 @@ public abstract class TimelineFragment
     private void getNewTweets() {
         swipeContainer.setRefreshing(true);
         if (mTweets.isEmpty()) {
-            populateTimeline(mCollection, false, 25, 1, 0);
+            populateTimeline(mUser, mCollection, false, 25, 1, 0);
         } else {
-            populateTimeline(mCollection, true, 25, mTweets.get(0).getId(), 0);
+            populateTimeline(mUser, mCollection, true, 25, mTweets.get(0).getId(), 0);
         }
     }
 
@@ -123,10 +127,16 @@ public abstract class TimelineFragment
         return mTweets.size();
     }
 
-    abstract void populateTimeline(String collection, final boolean newTweets, int count, long sinceId, long maxId);
+    abstract void populateTimeline(User user, String collection, final boolean newTweets, int count, long sinceId, long maxId);
 
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    public void addTweet(Tweet tweet) {
+        tweet.setCollection(mCollection);
+        mTweets.add(0, tweet);
+        mTweetsAdapter.notifyDataSetChanged();
     }
 }

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/iv_profile_image"
+        android:paddingLeft="@dimen/activity_vertical_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/iv_profile_image"
+        android:layout_toEndOf="@+id/iv_profile_image"
+        android:id="@+id/tv_profile_name"
+        tools:text="Name"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/tv_profile_name"
+        android:layout_toEndOf="@+id/tv_profile_name"
+        android:id="@+id/tv_profile_screenname"
+        tools:text="@screenname"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_profile_tagline"
+        android:layout_below="@+id/tv_profile_name"
+        android:layout_toRightOf="@+id/iv_profile_image"
+        android:layout_toEndOf="@+id/iv_profile_image"
+        tools:text="tagline"
+        android:paddingLeft="16dp" />
+</RelativeLayout>
