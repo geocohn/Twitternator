@@ -29,8 +29,6 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONObject;
 
-import java.util.List;
-
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.util.TextUtils;
 
@@ -46,6 +44,7 @@ public class TimelineActivity
     private ViewPager mViewPager;
     private MenuItem mMyProfileMenu;
     private User mMe;
+    private HomeTimelineFragment mHomeTimelineFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +119,7 @@ public class TimelineActivity
                     Tweet tweet = Tweet.fromJson(response);
                     tweet.setCollection("me");
                     tweet.save();
-                    sendTweetToFragments(tweet);
+                    sendTweetToHomeTimeline(tweet);
                 }
 
                 @Override
@@ -130,14 +129,12 @@ public class TimelineActivity
         }
     }
 
-    private void sendTweetToFragments(Tweet tweet) {
-        List<Fragment> fragments =  getSupportFragmentManager().getFragments();
-        for (Fragment frag : fragments) {
-            if (frag.getClass().isInstance(TimelineFragment.class)) {
+    private void sendTweetToHomeTimeline(Tweet tweet) {
+            if (mHomeTimelineFragment != null && mHomeTimelineFragment.getClass().isInstance(TimelineFragment.class)) {
                 Log.d(LOG_TAG, "Adding new tweet to fragment");
-                ((TimelineFragment)frag).addTweet(tweet);
+                mHomeTimelineFragment.addTweet(tweet);
             }
-        }
+
     }
 
     public class TimelinePagerAdapter extends FragmentPagerAdapter {
@@ -149,7 +146,10 @@ public class TimelineActivity
         @Override
         public Fragment getItem(int position) {
             switch (position) {
-                case 0: return timelineFragmentInstance(new HomeTimelineFragment(), "home");
+                case 0: {
+                    mHomeTimelineFragment = new HomeTimelineFragment();
+                    return timelineFragmentInstance(mHomeTimelineFragment, "home");
+                }
                 case 1: return timelineFragmentInstance(new MentionsTimelineFragment(), "mentions");
             }
             return null;
