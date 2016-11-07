@@ -22,7 +22,7 @@
         android:hint="Tweet goes here" />
 
     <Button
-        android:text="Nah"
+        android:text="@string/add_dialog_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/etNewTweet"
@@ -34,7 +34,7 @@
         android:id="@+id/btCancel" />
 
     <Button
-        android:text="Ship it!"
+        android:text="@string/add_dialog_ok"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/btCancel"

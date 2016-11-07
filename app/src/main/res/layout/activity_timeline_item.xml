@@ -39,7 +39,8 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
             android:layout_below="@+id/tvUserName"
             android:layout_alignLeft="@+id/tvUserName"
-            android:layout_alignStart="@+id/tvUserName" />
+            android:layout_alignStart="@+id/tvUserName"
+            android:textColor="@color/colorAccent" />
 
         <TextView
             android:layout_width="wrap_content"

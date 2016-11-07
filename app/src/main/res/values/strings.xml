@@ -10,5 +10,7 @@
     <string name="activity_profile_name">Profile</string>
     <string name="tab_title_home">Home</string>
     <string name="tab_title_mentions">\@Mentions</string>
+    <string name="add_dialog_ok">Tweet it!</string>
+    <string name="add_dialog_cancel">Cancel</string>
 
 </resources>

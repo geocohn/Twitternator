@@ -63,7 +63,7 @@ public class TimelineActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new TweetAddFragment().show(getSupportFragmentManager(),
+                TweetAddFragment.newInstance(null).show(getSupportFragmentManager(),
                         "new tweet");
             }
         });

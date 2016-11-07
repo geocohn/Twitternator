@@ -18,6 +18,7 @@ package com.creationgroundmedia.twitternator.adapters;
 
 
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,7 @@ import android.widget.TextView;
 
 import com.creationgroundmedia.twitternator.R;
 import com.creationgroundmedia.twitternator.activities.ProfileActivity;
+import com.creationgroundmedia.twitternator.fragments.TweetAddFragment;
 import com.creationgroundmedia.twitternator.models.Tweet;
 import com.creationgroundmedia.twitternator.models.User;
 import com.creationgroundmedia.twitternator.util.RoundedCornersTransform;
@@ -75,6 +77,15 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         });
         holder.tvUserName.setText(tweet.getUserName());
         holder.tvScreenName.setText(tweet.getUserScreenName());
+        holder.tvScreenName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TweetAddFragment.newInstance(tweet.getUserScreenName())
+                        .show(((FragmentActivity)mContext).getSupportFragmentManager(),
+                        "reply tweet");
+
+            }
+        });
         holder.tvCreatedAt.setText(tweet.getCreatedAtRelativeTimeAgo());
         holder.tvBody.setText(tweet.getBody());
     }

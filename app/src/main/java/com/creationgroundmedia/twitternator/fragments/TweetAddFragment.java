@@ -19,6 +19,7 @@ import com.creationgroundmedia.twitternator.models.Tweet;
 
 public class TweetAddFragment extends DialogFragment {
 final static String LOG_TAG = TweetAddFragment.class.getSimpleName();
+    private static final String REPLY_TO = "replyto";
 
     private OnFragmentInteractionListener mListener;
     private Tweet mTweet;
@@ -26,14 +27,25 @@ final static String LOG_TAG = TweetAddFragment.class.getSimpleName();
     private TextView tvCharsLeft;
     private Button btOK;
     private Button btCancel;
-    private int charsLeft;
+    private String mReplyTo;
 
     public TweetAddFragment() {
         // Required empty public constructor
     }
 
+    public static TweetAddFragment newInstance(String replyTo) {
+
+        Bundle args = new Bundle();
+        args.putString(REPLY_TO, replyTo);
+
+        TweetAddFragment fragment = new TweetAddFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        mReplyTo = getArguments().getString(REPLY_TO);
         super.onCreate(savedInstanceState);
     }
 
@@ -43,6 +55,9 @@ final static String LOG_TAG = TweetAddFragment.class.getSimpleName();
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_tweet_add, container, false);
         etTweet = (EditText) view.findViewById(R.id.etNewTweet);
+        if (mReplyTo != null) {
+            etTweet.setText(mReplyTo);
+        }
         tvCharsLeft = (TextView) view.findViewById(R.id.tvCharsLeft);
         btOK = (Button) view.findViewById(R.id.btOK);
         btCancel = (Button) view.findViewById(R.id.btCancel);
