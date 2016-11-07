@@ -49,11 +49,18 @@ public class ProfileHeaderFragment extends Fragment {
         TextView tvProfileName = (TextView) view.findViewById(R.id.tv_profile_name);
         TextView tvProfileScreenname = (TextView) view.findViewById(R.id.tv_profile_screenname);
         TextView tvProfileTagline = (TextView) view.findViewById(R.id.tv_profile_tagline);
+        TextView tvFollowers = (TextView) view.findViewById(R.id.tv_followers);
+        TextView tvFollowing = (TextView) view.findViewById(R.id.tv_following);
 
-        Picasso.with(getContext()).load(mUser.getProfileImageUrl()).transform(new CircleTransform()).into(ivProfileImage);
+        Picasso.with(getContext())
+                .load(mUser.getProfileImageUrl())
+                .transform(new CircleTransform())
+                .into(ivProfileImage);
         tvProfileName.setText(mUser.getName());
         tvProfileScreenname.setText(mUser.getScreenName());
         tvProfileTagline.setText(mUser.getTagline());
+        tvFollowers.setText(String.valueOf(mUser.getFollowers()));
+        tvFollowing.setText(String.valueOf(mUser.getFollowing()));
 
         return view;
     }

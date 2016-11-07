@@ -29,6 +29,7 @@ import com.creationgroundmedia.twitternator.R;
 import com.creationgroundmedia.twitternator.activities.ProfileActivity;
 import com.creationgroundmedia.twitternator.models.Tweet;
 import com.creationgroundmedia.twitternator.models.User;
+import com.creationgroundmedia.twitternator.util.RoundedCornersTransform;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -62,7 +63,10 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Tweet tweet = mTweets.get(position);
-        Picasso.with(mContext).load(tweet.getUserProfileImageUrl()).into(holder.ivProfileImage);
+        Picasso.with(mContext)
+                .load(tweet.getUserProfileImageUrl())
+                .transform(new RoundedCornersTransform())
+                .into(holder.ivProfileImage);
         holder.ivProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

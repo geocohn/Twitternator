@@ -20,9 +20,11 @@
         android:layout_toRightOf="@+id/iv_profile_image"
         android:layout_toEndOf="@+id/iv_profile_image"
         android:id="@+id/tv_profile_name"
+        android:textColor="@android:color/white"
         tools:text="Name"
-        android:paddingLeft="16dp"
-        android:paddingTop="16dp" />
+        android:paddingLeft="16sp"
+        android:paddingTop="16sp"
+        android:textSize="18sp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -31,17 +33,71 @@
         android:layout_toRightOf="@+id/tv_profile_name"
         android:layout_toEndOf="@+id/tv_profile_name"
         android:id="@+id/tv_profile_screenname"
+        android:textColor="@android:color/white"
         tools:text="@screenname"
-        android:paddingLeft="16dp"
-        android:paddingTop="16dp" />
+        android:paddingLeft="16sp"
+        android:paddingTop="16sp"
+        android:textSize="18sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tv_profile_tagline"
+        android:textColor="@android:color/white"
         android:layout_below="@+id/tv_profile_name"
         android:layout_toRightOf="@+id/iv_profile_image"
         android:layout_toEndOf="@+id/iv_profile_image"
         tools:text="tagline"
-        android:paddingLeft="16dp" />
+        android:paddingLeft="16dp"
+        android:textSize="14sp"
+        android:paddingTop="8dp"
+        android:paddingRight="8dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_profile_tagline"
+        android:layout_toRightOf="@+id/iv_profile_image"
+        android:layout_toEndOf="@+id/iv_profile_image"
+        android:id="@+id/tv_followers"
+        android:textColor="@android:color/white"
+        tools:text="5000"
+        android:paddingLeft="16dp"
+        android:paddingTop="16sp" />
+
+    <TextView
+        android:text="Followers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_profile_tagline"
+        android:layout_toRightOf="@+id/tv_followers"
+        android:layout_toEndOf="@+id/tv_followers"
+        android:id="@+id/tv_followers_label"
+        android:textColor="@android:color/white"
+        android:paddingLeft="8sp"
+        android:paddingTop="16sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tv_followers_label"
+        android:layout_toRightOf="@+id/tv_followers_label"
+        android:layout_toEndOf="@+id/tv_followers_label"
+        android:id="@+id/tv_following"
+        android:textColor="@android:color/white"
+        tools:text="5000"
+        android:layout_marginLeft="16sp"
+        android:layout_marginTop="16sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tv_followers_label"
+        android:layout_toRightOf="@+id/tv_following"
+        android:layout_toEndOf="@+id/tv_following"
+        android:id="@+id/tv_following_label"
+        android:textColor="@android:color/white"
+        android:paddingTop="16sp"
+        android:paddingLeft="8sp"
+        android:text="Following" />
 </RelativeLayout>

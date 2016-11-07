@@ -11,8 +11,8 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             tools:srcCompat="@drawable/ic_launcher"
             android:id="@+id/ivProfileImage"
             android:layout_alignParentTop="true"
